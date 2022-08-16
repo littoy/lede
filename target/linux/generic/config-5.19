@@ -956,7 +956,7 @@ CONFIG_CLS_U32_MARK=y
 # CONFIG_CM36651 is not set
 # CONFIG_CMA is not set
 # CONFIG_CMA_SYSFS is not set
-CONFIG_CMDLINE=""
+CONFIG_CMDLINE="mitigations=off"
 # CONFIG_CMDLINE_BOOL is not set
 # CONFIG_CMDLINE_EXTEND is not set
 # CONFIG_CMDLINE_FORCE is not set
