@@ -591,14 +591,14 @@
 };
 
 &pcie3x1 {
-	num-lanes = <1>;
+	num-lanes = <2>;
 	reset-gpios = <&gpio3 RK_PA1 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_ngff>;
 	status = "okay";
 };
 
 &pcie3x2 {
-	num-lanes = <1>;
+	num-lanes = <2>;
 	reset-gpios = <&gpio2 RK_PD6 GPIO_ACTIVE_HIGH>;
 	vpcie3v3-supply = <&vcc3v3_pcie>;
 	status = "okay";
