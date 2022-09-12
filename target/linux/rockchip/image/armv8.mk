@@ -8,7 +8,7 @@ define Device/ezpro_mrkaio-m68s
   SOC := rk3568
   UBOOT_DEVICE_NAME := mrkaio-m68s-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script nanopi-r5s | pine64-img | gzip | append-metadata
-  DEVICE_PACKAGES := kmod-ata-ahci kmod-ata-ahci-platform
+  DEVICE_PACKAGES := kmod-ata-ahci kmod-ata-ahci-platform kmod-ata-core
 endef
 TARGET_DEVICES += ezpro_mrkaio-m68s
 
@@ -97,7 +97,7 @@ define Device/friendlyarm_nanopi-r5s
   SOC := rk3568
   UBOOT_DEVICE_NAME := nanopi-r5s-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script nanopi-r5s | pine64-img | gzip | append-metadata
-  DEVICE_PACKAGES := kmod-r8125
+  DEVICE_PACKAGES := kmod-r8125 kmod-nvme kmod-scsi-core
 endef
 TARGET_DEVICES += friendlyarm_nanopi-r5s
 
