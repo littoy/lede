@@ -482,7 +482,7 @@
 };
 
 &pcie3x2 {
-	num-lanes = <1>;
+	num-lanes = <2>;
 	max-link-speed = <2>;
 	num-ib-windows = <8>;
 	num-ob-windows = <8>;
