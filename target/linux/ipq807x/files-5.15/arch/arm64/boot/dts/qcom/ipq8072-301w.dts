@@ -5,18 +5,14 @@
 
 #include "ipq8074.dtsi"
 #include "ipq8074-hk-cpu.dtsi"
-#include "ipq8074-ac-nss.dtsi"
+#include "ipq8074-ess.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
 
 / {
-	#address-cells = <2>;
-	#size-cells = <2>;
-
 	model = "QNAP 301w";
 	compatible = "qnap,301w", "qcom,ipq8074";
-	interrupt-parent = <&intc>;
 
 	aliases {
 		serial0 = &blsp1_uart5;
@@ -367,58 +363,55 @@
 	pinctrl-names = "default";
 	reset-gpios = <&tlmm 37 GPIO_ACTIVE_LOW>;
 
-	ethernet-phy@0 {
+	aqr113c_0: ethernet-phy@0 {
 		compatible ="ethernet-phy-ieee802.3-c45";
 		reg = <0>;
 		reset-gpios = <&tlmm 59 GPIO_ACTIVE_LOW>;
 	};
 
-	ethernet-phy@8 {
+	aqr113c_8: ethernet-phy@8 {
 		compatible ="ethernet-phy-ieee802.3-c45";
 		reg = <8>;
 		reset-gpios = <&tlmm 44 GPIO_ACTIVE_LOW>;
 	};
 
-	ethernet-phy@16 {
+	qca8075_16: ethernet-phy@16 {
 		reg = <16>;
 	};
 
-	ethernet-phy@17 {
+	qca8075_17: ethernet-phy@17 {
 		reg = <17>;
 	};
 
-	ethernet-phy@18 {
+	qca8075_18: ethernet-phy@18 {
 		reg = <18>;
 	};
 
-	ethernet-phy@19 {
+	qca8075_19: ethernet-phy@19 {
 		reg = <19>;
 	};
-
 };
 
 &sdhc_1 {
-		/* According to the stock dts from the QNAP gpl drop
-		 * the emmc has a problem with the hs400 > hs200 speed switch.
-		 * But at the momment it doesn't seems possible to run that card in hs200 mode,
-		 * it doesn't get recognized without the hs400 mode.
-		 * Unfortunately it's not stable in hs400 mode so reduce the speed to mmc highspeed.
-		*/
-		no-1-8-v;
-		cap-sd-highspeed;
-		cap-mmc-highspeed;
-		max-frequency   = <5000000>;
-		vqmmc-supply = <&ldo11>;
-		status = "okay";
+	status = "okay";
+
+	/* According to the stock dts from the QNAP gpl drop
+	 * the emmc has a problem with the hs400 > hs200 speed switch.
+	 * Therefore remove the mmc-hs400-1_8v property
+	*/
+	/delete-property/ mmc-hs400-1_8v;
+	mmc-hs200-1_8v;
+	mmc-ddr-1_8v;
+	vqmmc-supply = <&l11>;
 };
 
-&ess_switch {
+&switch {
 	status = "okay";
 
 	switch_cpu_bmp = <0x1>;  /* cpu port bitmap */
 	switch_lan_bmp = <0x3e>; /* lan port bitmap */
 	switch_wan_bmp = <0xc0>; /* wan port bitmap */
-	switch_mac_mode = <0x0>; /* mac mode for uniphy instance0*/
+	switch_mac_mode = <0xb>; /* mac mode for uniphy instance0*/
 	switch_mac_mode1 = <0xd>; /* mac mode for uniphy instance1*/
 	switch_mac_mode2 = <0xd>; /* mac mode for uniphy instance2*/
 	bm_tick_mode = <0>; /* bm tick mode */
@@ -729,6 +722,10 @@
 	};
 };
 
+&edma {
+	status = "okay";
+};
+
 &soc {
 	dp1: dp1 {
 		device_type = "network";
@@ -737,10 +734,8 @@
 		reg = <0x3a001000 0x200>;
 		qcom,mactype = <0>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <16>;
+		phy-handle = <&qca8075_16>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 
 	dp2: dp2 {
@@ -750,10 +745,8 @@
 		reg = <0x3a001200 0x200>;
 		qcom,mactype = <0>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <17>;
+		phy-handle = <&qca8075_17>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 
 	dp3: dp3 {
@@ -763,10 +756,8 @@
 		reg = <0x3a001400 0x200>;
 		qcom,mactype = <0>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <18>;
+		phy-handle = <&qca8075_18>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 
 	dp4: dp4 {
@@ -776,10 +767,8 @@
 		reg = <0x3a001600 0x200>;
 		qcom,mactype = <0>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <19>;
+		phy-handle = <&qca8075_19>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 
 	dp5: dp5 {
@@ -789,10 +778,8 @@
 		reg = <0x3a001800 0x200>;
 		qcom,mactype = <1>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <8>;
+		phy-handle = <&aqr113c_8>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 
 	dp6: dp6 {
@@ -802,18 +789,13 @@
 		reg = <0x3a007000 0x3fff>;
 		qcom,mactype = <1>;
 		local-mac-address = [000000000000];
-		qcom,link-poll = <1>;
-		qcom,phy-mdio-addr = <0>;
+		phy-handle = <&aqr113c_0>;
 		phy-mode = "sgmii";
-		mdio-bus = <&mdio>;
 	};
 };
 
 &wifi {
 	status = "okay";
-	/* using board_id 0xff is intentionally
-	 * as the stock firmware is also using this default board_id
-	 */
-	qcom,board_id = <0xff>;
+	
 	qcom,ath11k-calibration-variant = "QNAP-301w";
 };
