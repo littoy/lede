@@ -1816,6 +1816,16 @@ define Device/xiaoyu_xy-c5
 endef
 TARGET_DEVICES += xiaoyu_xy-c5
 
+define Device/jdcloud_luban
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  IMAGE_SIZE := 15808k
+  DEVICE_VENDOR := jdcloud
+  DEVICE_MODEL := Luban
+  DEVICE_PACKAGES += kmod-mt7915e wpad-openssl uboot-envtools
+endef
+TARGET_DEVICES += jdcloud_luban
+
 define Device/xzwifi_creativebox-v1
   $(Device/dsa-migration)
   IMAGE_SIZE := 32448k
@@ -1843,6 +1853,8 @@ define Device/youku_yk-l2
   DEVICE_MODEL := YK-L2
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 \
 	kmod-usb-ledtrig-usbport
+  UIMAGE_MAGIC := 0x12291000
+  UIMAGE_NAME := 400000000000000000003000
 endef
 TARGET_DEVICES += youku_yk-l2
 
