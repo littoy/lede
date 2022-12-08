@@ -23,7 +23,7 @@ start()
 	d=$(echo -n ' Core ')
 	e=$(cat /proc/cpuinfo | grep 'processor' | wc -l)
 	f=$(echo -n ' Thread ')
-	g=$(cat /tmp/sysinfo/model)
+	g=$(cat /proc/cpuinfo |grep -m1 'model name'|awk -F: '{print $2$3}')
 	h=${g}' - '${a}${b}${c}${d}${e}${f}
 
 	mkdir -p /tmp/sysinfo
