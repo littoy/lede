@@ -31,29 +31,31 @@ start()
 
 	uci get network.@globals[0].packet_steering >/dev/null 2>&1
 	if [[ $? != 0 ]];then
+		sysctl -w net.core.rps_sock_flow_entries=32768 >/dev/null
+		for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
+		do
+			echo 0 > $fileRps
+		done
+		
+		for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt)
+		do
+			echo 0 > $fileRfc
+		done
 		exit 0
 	fi
 
 	rfc=4096
 	cc=$(grep -c processor /proc/cpuinfo)
 	rsfe=$(echo $cc*$rfc | bc)
-	sysctl -w net.core.rps_sock_flow_entries=$rsfe >/dev/null
-	case $cc in
-		1)
-			cc=1 #0001
-			;;
-		2)
-			cc=3 #0011
-			;;
-		3)
-			cc=6 #0110
-			;;
-		4)
-			cc=14 #1110
-			;;
-		*)
-			cc=1E #00011110
-	esac
+	sysctl -w net.core.rps_sock_flow_entries=32768 >/dev/null
+	cflag="0"
+	cc=`expr $cc - 1`
+	for z in `seq $cc`
+	do
+		cflag="1${cflag}"
+	done
+	cc=`echo "ibase=2;obase=10000;$cflag"|bc`
+
 	for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
 	do
 		echo $cc > $fileRps
