@@ -55,6 +55,7 @@ ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 	grep -v -e CONFIG_BLK_DEV_INITRD $(LINUX_DIR)/.config.old > $(LINUX_DIR)/.config
 	echo 'CONFIG_BLK_DEV_INITRD=y' >> $(LINUX_DIR)/.config
 	echo 'CONFIG_INITRAMFS_SOURCE=""' >> $(LINUX_DIR)/.config
+	sed -i "s/CONFIG_HYPERV_UTILS=m/CONFIG_HYPERV_UTILS=y/g" $(LINUX_DIR)/.config
     endef
   else
   ifeq ($(strip $(CONFIG_EXTERNAL_CPIO)),"")
@@ -62,11 +63,13 @@ ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 	grep -v -e INITRAMFS -e CONFIG_RD_ -e CONFIG_BLK_DEV_INITRD $(LINUX_DIR)/.config.old > $(LINUX_DIR)/.config
 	echo 'CONFIG_BLK_DEV_INITRD=y' >> $(LINUX_DIR)/.config
 	echo 'CONFIG_INITRAMFS_SOURCE="$(strip $(TARGET_DIR) $(INITRAMFS_EXTRA_FILES))"' >> $(LINUX_DIR)/.config
+	sed -i "s/CONFIG_HYPERV_UTILS=m/CONFIG_HYPERV_UTILS=y/g" $(LINUX_DIR)/.config
     endef
   else
     define Kernel/SetInitramfs/PreConfigure
 	grep -v INITRAMFS $(LINUX_DIR)/.config.old > $(LINUX_DIR)/.config
 	echo 'CONFIG_INITRAMFS_SOURCE="$(call qstrip,$(CONFIG_EXTERNAL_CPIO))"' >> $(LINUX_DIR)/.config
+	sed -i "s/CONFIG_HYPERV_UTILS=m/CONFIG_HYPERV_UTILS=y/g" $(LINUX_DIR)/.config
     endef
   endif
 endif
@@ -117,7 +120,6 @@ define Kernel/Configure/Default
 		cp $(LINUX_DIR)/.config.set $(LINUX_DIR)/.config; \
 		cp $(LINUX_DIR)/.config.set $(LINUX_DIR)/.config.prev; \
 	}
-	sed -i "s/CONFIG_HYPERV_UTILS=m/CONFIG_HYPERV_UTILS=y/g" $(LINUX_DIR)/.config
 	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) $(if $(findstring uml,$(BOARD)),ARCH=$(ARCH)) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
 	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | $(MKHASH) md5 > $(LINUX_DIR)/.vermagic
 endef
