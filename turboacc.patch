@@ -1,0 +1,29 @@
+--- a/package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc	2023-01-13 23:41:19.933254551 +0800
++++ b/package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc	2023-01-20 10:29:58.560874832 +0800
+@@ -254,8 +254,26 @@ start(){
+ 
+ 	if [ "${bbr_cca}" -eq "1" ];  then
+ 		sysctl -w net.ipv4.tcp_congestion_control="bbr"
++                sysctl -w net.core.default_qdisc="fq"
++                a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
++                b=$(echo "$a" | wc -l)
++                for i in $(seq 1 $b)
++                do
++                        c=$(echo "$a" | sed -n ${i}p)
++                        tc qdisc add dev $c root handle 1: htb default 30
++                        tc qdisc del dev $c root
++                done
+ 	else
+ 		sysctl -w net.ipv4.tcp_congestion_control="cubic"
++                sysctl -w net.core.default_qdisc="fq_codel"
++                a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
++                b=$(echo "$a" | wc -l)
++                for i in $(seq 1 $b)
++                do
++                        c=$(echo "$a" | sed -n ${i}p)
++                        tc qdisc add dev $c root handle 1: htb default 30
++                        tc qdisc del dev $c root
++                done
+ 	fi
+ 
+ 	if [ "${dns_caching}" -eq "1" ];  then
