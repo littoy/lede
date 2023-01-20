@@ -69,7 +69,7 @@ start()
 	
 	for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt)
 	do
-		eth_name=$(echo "$fileRps"|awk -F/ '{print $5}')
+		eth_name=$(echo "$fileRfc"|awk -F/ '{print $5}')
 		queues_count=$(find /sys/class/net/$eth_name/queues/ -name 'rx-*'|wc -l)
 		if [ $queues_count = 1 ]; then
 		echo $rfc > $fileRfc
