@@ -116,17 +116,3 @@ define KernelPackage/i915-gvt/description
 endef
 
 $(eval $(call KernelPackage,i915-gvt))
-
-define KernelPackage/hv_utils
-  SUBMENU:=$(NETWORK_DEVICES_MENU)
-  TITLE:=Microsoft Hyper-V Utilities driver
-  KCONFIG:=CONFIG_HYPERV_UTILS=y
-  FILES:=$(LINUX_DIR)/drivers/hv/hv_utils.ko
-  AUTOLOAD:=$(call AutoLoad,35,hv_utils,1)
-endef
-
-define KernelPackage/hv_utils/description
- Microsoft Hyper-V Utilities driver.
-endef
-
-$(eval $(call KernelPackage,hv_utils))
