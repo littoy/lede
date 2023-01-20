@@ -31,7 +31,7 @@ start()
 
 	uci get network.@globals[0].packet_steering >/dev/null 2>&1
 	if [[ $? != 0 ]];then
-		sysctl -w net.core.rps_sock_flow_entries=32768 >/dev/null
+		sysctl -w net.core.rps_sock_flow_entries=0 >/dev/null
 		for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
 		do
 			echo 0 > $fileRps
@@ -57,14 +57,23 @@ start()
 	done
 	cc=`echo "ibase=2;obase=10000;$cflag"|bc`
 
+	
 	for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
 	do
+		eth_name=$(echo "$fileRps"|awk -F/ '{print $5}')
+		queues_count=$(find /sys/class/net/$eth_name/queues/ -name 'rx-*'|wc -l)
+		if [ $queues_count = 1 ]; then
 		echo $cc > $fileRps
+		fi
 	done
 	
 	for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt)
 	do
+		eth_name=$(echo "$fileRps"|awk -F/ '{print $5}')
+		queues_count=$(find /sys/class/net/$eth_name/queues/ -name 'rx-*'|wc -l)
+		if [ $queues_count = 1 ]; then
 		echo $rfc > $fileRfc
+		fi
 	done
 	
 	uci set network.@globals[0].packet_steering=1
