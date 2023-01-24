@@ -6,7 +6,7 @@
  * Copyright (c) 2022 Marty Jones <mj8263788@gmail.com>
  * Copyright (c) 2022 Tianling Shen <cnsztl@gmail.com>
  */
-
+ 
 /dts-v1/;
 
 #include <dt-bindings/gpio/gpio.h>
@@ -34,7 +34,6 @@
 		stdout-path = "serial2:1500000n8";
 	};
 
-#ifdef DTS_NO_LEGACY
 	hdmi-con {
 		compatible = "hdmi-connector";
 		type = "a";
@@ -45,7 +44,6 @@
 			};
 		};
 	};
-#endif
 
 	leds {
 		compatible = "gpio-leds";
@@ -125,6 +123,18 @@
 		vin-supply = <&vcc5v0_sysp>;
 	};
 
+	vcc5v0_usb_otg: vcc5v0-usb-otg {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc5v0_usb_otg_en>;
+		regulator-name = "vcc5v0_usb_otg";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		vin-supply = <&vcc5v0_sysp>;
+	};
+
 	vcc3v3_pcie: vcc3v3-pcie {
 		compatible = "regulator-fixed";
 		enable-active-high;
@@ -187,7 +197,6 @@
 	status = "okay";
 };
 
-#ifdef DTS_NO_LEGACY
 &gpu {
 	mali-supply = <&vdd_gpu>;
 	status = "okay";
@@ -214,7 +223,6 @@
 &hdmi_sound {
 	status = "okay";
 };
-#endif
 
 &i2c0 {
 	i2c-scl-rising-time-ns = <160>;
@@ -473,11 +481,9 @@
 	};
 };
 
-#ifdef DTS_NO_LEGACY
 &i2s0_8ch {
 	status = "okay";
 };
-#endif
 
 &mdio0 {
 	rgmii_phy0: phy@1 {
@@ -530,7 +536,7 @@
 };
 
 &pcie3x2 {
-	num-lanes = <2>;
+	num-lanes = <1>;
 	max-link-speed = <2>;
 	num-ib-windows = <8>;
 	num-ob-windows = <8>;
@@ -580,6 +586,9 @@
 	usb {
 		vcc5v0_usb_host_en: vcc5v0_usb_host_en {
 			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+		vcc5v0_usb_otg_en: vcc5v0_usb_otg_en {
+			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 };
@@ -675,6 +684,7 @@
 };
 
 &usb2phy0_otg {
+	phy-supply = <&vcc5v0_usb_otg>;
 	status = "okay";
 };
 
@@ -683,14 +693,15 @@
 };
 
 &usb2phy1_host {
+	phy-supply = <&vcc5v0_usb_host>;
 	status = "okay";
 };
 
 &usb2phy1_otg {
+	phy-supply = <&vcc5v0_usb_host>;
 	status = "okay";
 };
 
-#ifdef DTS_NO_LEGACY
 &vop {
 	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
 	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
@@ -707,4 +718,3 @@
 		remote-endpoint = <&hdmi_in_vp0>;
 	};
 };
-#endif
