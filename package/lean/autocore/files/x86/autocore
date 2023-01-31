@@ -29,8 +29,9 @@ start()
 	mkdir -p /tmp/sysinfo
 	echo $h > /tmp/sysinfo/model
 
-	uci get network.@globals[0].packet_steering >/dev/null 2>&1
-	if [[ $? != 0 ]];then
+	# uci get network.@globals[0].packet_steering >/dev/null 2>&1
+	packet_steering="$(uci get "network.@globals[0].packet_steering")"
+    if [[ "$packet_steering" != 1 ]];then
 		sysctl -w net.core.rps_sock_flow_entries=0 >/dev/null
 		for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
 		do
