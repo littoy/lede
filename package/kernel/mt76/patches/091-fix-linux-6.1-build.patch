@@ -31,7 +31,6 @@
  		mt76_dma_rx_fill(dev, &dev->q_rx[i]);
  		napi_enable(&dev->napi[i]);
  	}
-
 --- a/mt76.h
 +++ b/mt76.h
 @@ -37,6 +37,9 @@
@@ -44,15 +43,4 @@
 
  struct mt76_dev;
  struct mt76_phy;
-
---- a/mt7603/pci.c
-+++ b/mt7603/pci.c
-@@ -1,6 +1,9 @@
- // SPDX-License-Identifier: ISC
-
- #include <linux/kernel.h>
-+#ifdef is_signed_type
-+#undef is_signed_type
-+#endif
- #include <linux/module.h>
- #include <linux/pci.h>
+ 
