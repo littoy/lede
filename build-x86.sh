@@ -1,0 +1,43 @@
+git pull
+if [ $? != 0 ];then
+	echo 'pull fail'
+	exit 1
+fi
+
+# 默认不更新第三方库
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# ./scripts/feeds update luci
+# ./scripts/feeds update packages
+# ./scripts/feeds update routing
+# ./scripts/feeds update telephony
+# ./scripts/feeds install -a
+
+if [ ! -d "package/ddns-go" ]; then
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
+else
+pushd package/ddns-go
+git pull
+popd
+fi
+
+make defconfig
+if [ $? != 0 ];then
+        echo 'defconfig fail'
+        exit 1
+fi
+
+#sed -i "s/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-Os -pipe\"/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=corei7\"/" .config
+#sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe\"/CONFIG_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=corei7\"/" .config
+#sed -i "s/CONFIG_CPU_TYPE=\" \"/CONFIG_CPU_TYPE=\"corei7\"/" .config
+#rm -f /mnt/sdb1/x86lede/staging_dir/hostpkg/bin/ruby
+sed -i 's/192.168.1./192.168.125./' .config
+sed -i 's/192.168.125.1/192.168.125.2/' .config
+c=$(grep -c default_qdisc package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc)
+if [ $c = 0 ]; then
+patch -p1 < turboacc.patch
+fi
+if [ $? = 0 ];then
+nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j1 >> makelog.txt 2>&1 &
+fi
