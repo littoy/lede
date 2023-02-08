@@ -79,6 +79,7 @@ define KernelPackage/gpu-lima
 	CONFIG_DRM_LIMA
   FILES:= \
 	$(LINUX_DIR)/drivers/gpu/drm/vgem/vgem.ko \
+	$(LINUX_DIR)/drivers/gpu/drm/drm_shmem_helper.ko \
 	$(LINUX_DIR)/drivers/gpu/drm/scheduler/gpu-sched.ko \
 	$(LINUX_DIR)/drivers/gpu/drm/lima/lima.ko
   AUTOLOAD:=$(call AutoProbe,lima vgem)
