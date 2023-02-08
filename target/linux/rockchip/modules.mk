@@ -6,7 +6,7 @@ define KernelPackage/drm-rockchip
   SUBMENU:=$(VIDEO_MENU)
   TITLE:=Rockchip DRM support
   DEPENDS:=@TARGET_rockchip +kmod-backlight +kmod-drm-kms-helper \
-	+kmod-multimedia-input +LINUX_6_1:kmod-drm-display-helper
+	+kmod-multimedia-input +LINUX_6_1:kmod-drm-display-helper +LINUX_6_1:kmod-gpu-lima
   KCONFIG:= \
 	CONFIG_DRM_ROCKCHIP \
 	CONFIG_DRM_LOAD_EDID_FIRMWARE=y \
@@ -68,3 +68,24 @@ define KernelPackage/saradc-rockchip/description
 endef
 
 $(eval $(call KernelPackage,saradc-rockchip))
+
+define KernelPackage/gpu-lima
+  SUBMENU:=$(VIDEO_MENU)
+  TITLE:=Mali-4xx GPU support
+  DEPENDS:=@TARGET_rockchip +kmod-drm
+  KCONFIG:= \
+	CONFIG_DRM_VGEM \
+	CONFIG_DRM_GEM_CMA_HELPER=y \
+	CONFIG_DRM_LIMA
+  FILES:= \
+	$(LINUX_DIR)/drivers/gpu/drm/vgem/vgem.ko \
+	$(LINUX_DIR)/drivers/gpu/drm/scheduler/gpu-sched.ko \
+	$(LINUX_DIR)/drivers/gpu/drm/lima/lima.ko
+  AUTOLOAD:=$(call AutoProbe,lima vgem)
+endef
+
+define KernelPackage/gpu-lima/description
+  Open-source reverse-engineered driver for Mali-4xx GPUs
+endef
+
+$(eval $(call KernelPackage,gpu-lima))
