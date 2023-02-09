@@ -50,7 +50,6 @@ sysctl -w net.netfilter.nf_conntrack_buckets = 32384
 case "$(board_name)" in
 embedfire,doornet1|\
 fastrhino,r66s|\
-friendlyarm,nanopi-r5c|\
 firefly,rk3568-roc-pc)
 	set_interface_core 3 "eth0"
 	set_interface_core 12 "eth1"
