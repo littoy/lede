@@ -4,7 +4,7 @@
  
  	if [ "${bbr_cca}" -eq "1" ];  then
  		sysctl -w net.ipv4.tcp_congestion_control="bbr"
-+                sysctl -w net.core.default_qdisc="fq"
++                sysctl -w net.core.default_qdisc="cake"
 +                a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
 +                b=$(echo "$a" | wc -l)
 +                for i in $(seq 1 $b)
