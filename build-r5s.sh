@@ -5,21 +5,21 @@ if [ $? != 0 ];then
         exit 1
 fi
 
-#replace mac80211
-rm -rf package/kernel/mac80211 
-rm -rf package/kernel/rtl8821cu
-rm -rf package/kernel/mt76
-rm -rf package/network/services/hostapd
+#use openwrt mac80211
+# rm -rf package/kernel/mac80211 
+# rm -rf package/kernel/rtl8821cu
+# rm -rf package/kernel/mt76
+# rm -rf package/network/services/hostapd
 
-svn export https://github.com/openwrt/openwrt/trunk/package/kernel/mac80211 package/kernel/mac80211
-svn export https://github.com/openwrt/openwrt/trunk/package/kernel/mt76 package/kernel/mt76
-svn export https://github.com/openwrt/openwrt/trunk/package/network/services/hostapd package/network/services/hostapd
+# svn export https://github.com/openwrt/openwrt/trunk/package/kernel/mac80211 package/kernel/mac80211
+# svn export https://github.com/openwrt/openwrt/trunk/package/kernel/mt76 package/kernel/mt76
+# svn export https://github.com/openwrt/openwrt/trunk/package/network/services/hostapd package/network/services/hostapd
 
-./scripts/feeds update -a
 # ./scripts/feeds update luci
 # ./scripts/feeds update packages
 # ./scripts/feeds update routing
 # ./scripts/feeds update telephony
+./scripts/feeds update -a
 ./scripts/feeds install -a
 
 if [ ! -d "package/ddns-go" ]; then
