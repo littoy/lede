@@ -17,6 +17,21 @@ start()
 	sysctl -w net.core.somaxconn=32768 >/dev/null
 	sysctl -w net.core.netdev_max_backlog=52768 >/dev/null
 
+	a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
+	b=$(echo "$a" | wc -l)
+	for i in $(seq 1 $b)
+	do
+		c=$(echo "$a" | sed -n ${i}p)
+		ethtool -K $c rx-checksum on >/dev/null 2>&1
+		ethtool -K $c tx-checksum-ip-generic on >/dev/null 2>&1 || (
+		ethtool -K $c tx-checksum-ipv4 on >/dev/null 2>&1
+		ethtool -K $c tx-checksum-ipv6 on >/dev/null 2>&1)
+		ethtool -K $c tx-scatter-gather on >/dev/null 2>&1
+		ethtool -K $c gso on >/dev/null 2>&1
+		ethtool -K $c tso on sg on tx on >/dev/null 2>&1
+		ethtool -K $c ufo on >/dev/null 2>&1
+	done
+
 	a=$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq)
 	b=$(echo -n ' : ')
 	c=$(cat /proc/cpuinfo | grep 'core id' | sort -u | wc -l)
@@ -31,7 +46,7 @@ start()
 
 	# uci get network.@globals[0].packet_steering >/dev/null 2>&1
 	packet_steering="$(uci get "network.@globals[0].packet_steering")"
-    if [[ "$packet_steering" != 1 ]];then
+    if [[ "$packet_steering" != "1" ]];then
 		sysctl -w net.core.rps_sock_flow_entries=0 >/dev/null
 		for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)
 		do
@@ -75,25 +90,6 @@ start()
 		if [ $queues_count = 1 ]; then
 		echo $rfc > $fileRfc
 		fi
-	done
-	
-	uci set network.@globals[0].packet_steering=1
-	uci commit network
-
-	a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
-	b=$(echo "$a" | wc -l)
-	for i in $(seq 1 $b)
-	do
-		c=$(echo "$a" | sed -n ${i}p)
-		ethtool -K $c rx-checksum on >/dev/null 2>&1
-		ethtool -K $c tx-checksum-ip-generic on >/dev/null 2>&1 || (
-		ethtool -K $c tx-checksum-ipv4 on >/dev/null 2>&1
-		ethtool -K $c tx-checksum-ipv6 on >/dev/null 2>&1)
-		ethtool -K $c tx-scatter-gather on >/dev/null 2>&1
-		ethtool -K $c gso on >/dev/null 2>&1
-		ethtool -K $c tso on >/dev/null 2>&1
-		ethtool -K $c tso on sg on tx on >/dev/null 2>&1
-		ethtool -K $c ufo on >/dev/null 2>&1
 	done
 
 	[ -f /etc/index.htm ] && mv /etc/index.htm /usr/lib/lua/luci/view/admin_status/index.htm
