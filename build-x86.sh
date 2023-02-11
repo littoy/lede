@@ -17,6 +17,10 @@ fi
 
 # 默认不更新第三方库
 ./scripts/feeds update -a
+if [ $? != 0 ];then
+        echo 'pull fail'
+        exit 1
+fi
 ./scripts/feeds install -a
 
 # ./scripts/feeds update luci
@@ -33,6 +37,7 @@ git pull
 popd
 fi
 
+rm -rf ./tmp
 make defconfig
 if [ $? != 0 ];then
         echo 'defconfig fail'
@@ -45,10 +50,10 @@ fi
 #rm -f /mnt/sdb1/x86lede/staging_dir/hostpkg/bin/ruby
 # sed -i 's/192.168.1./192.168.125./' .config
 # sed -i 's/192.168.125.1/192.168.125.2/' .config
-c=$(grep -c default_qdisc package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc)
-if [ $c = 0 ]; then
-patch -p1 < turboacc.patch
-fi
+# c=$(grep -c default_qdisc package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc)
+# if [ $c = 0 ]; then
+# patch -p1 < turboacc.patch
+# fi
 if [ $? = 0 ];then
-nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j1 >> makelog.txt 2>&1 &
+nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j2 >> makelog.txt 2>&1 &
 fi

@@ -20,6 +20,10 @@ fi
 # ./scripts/feeds update routing
 # ./scripts/feeds update telephony
 ./scripts/feeds update -a
+if [ $? != 0 ];then
+        echo 'pull fail'
+        exit 1
+fi
 ./scripts/feeds install -a
 
 if [ ! -d "package/ddns-go" ]; then
@@ -30,7 +34,7 @@ git pull
 popd
 fi
 
-
+rm -rf ./tmp
 make defconfig
 
 
@@ -39,10 +43,10 @@ sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe -mcpu=generic\"/CONFIG_TARGET_O
 sed -i 's/CONFIG_CPU_TYPE="generic"/CONFIG_CPU_TYPE="cortex-a55"/' .config
 #sed -i 's/192.168.1./192.168.125./' .config
 #sed -i 's/192.168.125.1/192.168.125.10/' .config
-c=$(grep -c default_qdisc package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc)
-if [ $c = 0 ]; then
-patch -p1 < turboacc.patch
-fi
+# c=$(grep -c default_qdisc package/feeds/luci/luci-app-turboacc/root/etc/init.d/turboacc)
+# if [ $c = 0 ]; then
+# patch -p1 < turboacc.patch
+# fi
 if [ $? = 0 ]; then
-nohup make download -j8 >> makelog.txt 2>&1 &&  make V=s -j1 >> makelog.txt 2>&1 &
+nohup make download -j8 >> makelog.txt 2>&1 &&  make V=s -j2 >> makelog.txt 2>&1 &
 fi
