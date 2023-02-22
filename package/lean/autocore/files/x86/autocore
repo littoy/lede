@@ -48,12 +48,12 @@ start()
 	packet_steering="$(uci get "network.@globals[0].packet_steering")"
 	if [[ "$packet_steering" != "1" ]]; then
 		sysctl -w net.core.rps_sock_flow_entries=0 >/dev/null
-		for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus /sys/class/net/enp*/queues/rx-*/rps_cpus)
+		for fileRps in $(ls /sys/class/net/e*/queues/rx-*/rps_cpus)
 		do
 			echo 0 > $fileRps
 		done
 		
-		for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt /sys/class/net/enp*/queues/rx-*/rps_flow_cnt)
+		for fileRfc in $(ls /sys/class/net/e*/queues/rx-*/rps_flow_cnt)
 		do
 			echo 0 > $fileRfc
 		done
@@ -74,7 +74,7 @@ start()
 	cc=`echo "ibase=2;obase=10000;$cflag"|bc`
 
 	
-	for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus /sys/class/net/enp*/queues/rx-*/rps_cpus)
+	for fileRps in $(ls /sys/class/net/e*/queues/rx-*/rps_cpus)
 	do
 		eth_name=$(echo "$fileRps"|awk -F/ '{print $5}')
 		queues_count=$(find /sys/class/net/$eth_name/queues/ -name 'rx-*'|wc -l)
@@ -83,7 +83,7 @@ start()
 		fi
 	done
 	
-	for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt /sys/class/net/enp*/queues/rx-*/rps_flow_cnt)
+	for fileRfc in $(ls /sys/class/net/e*/queues/rx-*/rps_flow_cnt)
 	do
 		eth_name=$(echo "$fileRfc"|awk -F/ '{print $5}')
 		queues_count=$(find /sys/class/net/$eth_name/queues/ -name 'rx-*'|wc -l)
