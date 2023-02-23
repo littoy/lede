@@ -23,6 +23,12 @@ start()
 		echo passive > /sys/devices/system/cpu/intel_pstate/status
 		for file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo "schedutil" > $file; done
 	fi
+	sdriver=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver 2>/dev/null)
+	if [ "$sdriver" = "acpi-cpufreq" ]; then
+		for file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo "ondemand" > $file; done
+		echo 5 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+		echo 60 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+	fi
 	echo ladder > /sys/devices/system/cpu/cpuidle/current_governor
 
 	a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
