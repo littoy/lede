@@ -15,7 +15,7 @@ fi
 # svn export https://github.com/openwrt/openwrt/trunk/package/network/services/hostapd package/network/services/hostapd
 
 
-# 默认不更新第三方库
+
 ./scripts/feeds update -a
 if [ $? != 0 ];then
         echo 'pull fail'
@@ -23,19 +23,20 @@ if [ $? != 0 ];then
 fi
 ./scripts/feeds install -a
 
+# 默认不更新第三方库
 # ./scripts/feeds update luci
 # ./scripts/feeds update packages
 # ./scripts/feeds update routing
 # ./scripts/feeds update telephony
 # ./scripts/feeds install -a
 
-if [ ! -d "package/ddns-go" ]; then
-git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
-else
-pushd package/ddns-go
-git pull
-popd
-fi
+# if [ ! -d "package/ddns-go" ]; then
+# git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
+# else
+# pushd package/ddns-go
+# git pull
+# popd
+# fi
 
 rm -rf ./tmp
 make defconfig
@@ -55,5 +56,5 @@ fi
 # patch -p1 < turboacc.patch
 # fi
 if [ $? = 0 ];then
-nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j2 >> makelog.txt 2>&1 &
+nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j1 >> makelog.txt 2>&1 &
 fi

@@ -26,13 +26,13 @@ if [ $? != 0 ];then
 fi
 ./scripts/feeds install -a
 
-if [ ! -d "package/ddns-go" ]; then
-git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
-else
-pushd package/ddns-go
-git pull
-popd
-fi
+# if [ ! -d "package/ddns-go" ]; then
+# git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
+# else
+# pushd package/ddns-go
+# git pull
+# popd
+# fi
 
 rm -rf ./tmp
 make defconfig
