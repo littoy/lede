@@ -18,6 +18,7 @@ start()
 	sysctl -w net.core.netdev_max_backlog=52768 >/dev/null
 
 	#power sche optimize
+	if [[ ! -f /etc/init.d/cpufreq || ! -f /etc/init.d/cpufreq ]]; then
 	if [ -f /sys/devices/system/cpu/intel_pstate/status ]; then
 		# a=$(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_transition_latency)
 		echo passive > /sys/devices/system/cpu/intel_pstate/status
@@ -28,6 +29,7 @@ start()
 		for file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo "ondemand" > $file; done
 		echo 5 > /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
 		echo 60 > /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+	fi
 	fi
 	echo ladder > /sys/devices/system/cpu/cpuidle/current_governor
 
