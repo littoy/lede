@@ -18,7 +18,7 @@ start()
 	sysctl -w net.core.netdev_max_backlog=52768 >/dev/null
 
 	#power sche optimize
-	if [[ ! -f /etc/init.d/cpufreq || ! -f /etc/init.d/cpufreq ]]; then
+	if [[ ! -f /etc/init.d/cpufreq || ! -f /etc/config/cpufreq ]]; then
 	if [ -f /sys/devices/system/cpu/intel_pstate/status ]; then
 		# a=$(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_transition_latency)
 		echo passive > /sys/devices/system/cpu/intel_pstate/status
