@@ -2,11 +2,11 @@
 - 默认加了额外的feeds
 - luci-app-cpufreq 支持arm和x86_64
 - mitigations=off
-- 默认电源策略优化
-- x86_64 autocore 网卡“最佳”参数优化
+- x86_64 autocore 包含网卡和cpu“最佳”参数优化
 - 满血BBR
 - 旁路由lan zone fullcone
 - r5s 网卡“最佳”参数优化
+- 支持更多电源策略
 - n6000 i226 网卡测试
 <img width="875" alt="image" src="https://user-images.githubusercontent.com/103546957/223681858-232640d1-2236-4041-8877-83a36a2bee96.png">
 
