@@ -48,6 +48,7 @@ fi
 #sed -i "s/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-Os -pipe\"/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=corei7\"/" .config
 #sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe\"/CONFIG_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=corei7\"/" .config
 #sed -i "s/CONFIG_CPU_TYPE=\" \"/CONFIG_CPU_TYPE=\"corei7\"/" .config
+sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe\"/CONFIG_TARGET_OPTIMIZATION=\"-O2 -pipe\"/" .config
 #rm -f /mnt/sdb1/x86lede/staging_dir/hostpkg/bin/ruby
 # sed -i 's/192.168.1./192.168.125./' .config
 # sed -i 's/192.168.125.1/192.168.125.2/' .config

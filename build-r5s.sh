@@ -38,8 +38,8 @@ rm -rf ./tmp
 make defconfig
 
 
-sed -i "s/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-Os -pipe -mcpu=generic\"/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=cortex-a55\"/" .config
-sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe -mcpu=generic\"/CONFIG_TARGET_OPTIMIZATION=\"-O3 -pipe -mtune=cortex-a55\"/" .config
+sed -i "s/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-Os -pipe -mcpu=generic\"/CONFIG_DEFAULT_TARGET_OPTIMIZATION=\"-O2 -pipe -mtune=cortex-a55\"/" .config
+sed -i "s/CONFIG_TARGET_OPTIMIZATION=\"-Os -pipe -mcpu=generic\"/CONFIG_TARGET_OPTIMIZATION=\"-O2 -pipe -mtune=cortex-a55\"/" .config
 sed -i 's/CONFIG_CPU_TYPE="generic"/CONFIG_CPU_TYPE="cortex-a55"/' .config
 #sed -i 's/192.168.1./192.168.125./' .config
 #sed -i 's/192.168.125.1/192.168.125.10/' .config
