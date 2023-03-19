@@ -17,6 +17,10 @@ start()
 	sysctl -w net.core.somaxconn=32768 >/dev/null
 	sysctl -w net.core.netdev_max_backlog=52768 >/dev/null
 
+	if [ -f /sys/devices/system/cpu/intel_pstate/status ]; then
+	echo passive > /sys/devices/system/cpu/intel_pstate/status
+	fi
+
 	#power sche optimize
 	if [[ ! -f /etc/init.d/cpufreq || ! -f /etc/config/cpufreq ]]; then
 	if [ -f /sys/devices/system/cpu/intel_pstate/status ]; then
