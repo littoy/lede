@@ -42,6 +42,7 @@ endef
 define Package/autocore-arm/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/arm/index.htm $(1)/etc/index.htm
+	$(INSTALL_DATA) ./files/cpu.awk $(1)/etc/cpu.awk
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/arm/090-cover-index_htm $(1)/etc/uci-defaults/
 	$(INSTALL_DIR) $(1)/sbin
@@ -54,6 +55,7 @@ define Package/autocore-x86/install
 	$(INSTALL_BIN) ./files/x86/autocore $(1)/etc/init.d/autocore
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/x86/index.htm $(1)/etc/index.htm
+	$(INSTALL_DATA) ./files/cpu.awk $(1)/etc/cpu.awk
 	$(INSTALL_DIR) $(1)/sbin
 	$(CP) ./files/x86/sbin/* $(1)/sbin
 endef

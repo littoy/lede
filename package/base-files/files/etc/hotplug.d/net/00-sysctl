@@ -7,3 +7,6 @@ if [ "$ACTION" = add ]; then
 			sysctl -e -p - | logger -t sysctl
 	done
 fi
+if [ -f /sbin/ethinfo ]; then
+/sbin/ethinfo update
+fi

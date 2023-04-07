@@ -46,6 +46,7 @@
 		local ntm = require "luci.model.network".init()
 		local wan = ntm:get_wannet()
 		local wan6 = ntm:get_wan6net()
+		local cache = luci.http.formvalue("cache")
 
 		local conn_count = tonumber(
 			fs.readfile("/proc/sys/net/netfilter/nf_conntrack_count") or "") or 0
@@ -56,9 +57,14 @@
 
 		local user_info = luci.sys.exec("cat /proc/net/arp | grep -c '0x2'") or 0
 
-		local cpu_usage = luci.sys.exec("top -n1 | awk '/^CPU/ { printf(\"%d%%\", 100 - $8) }'") or "0%"
-		local cpu_info = luci.sys.exec("/sbin/cpuinfo") or "ARM Processor x 0 (233MHz, 2.3°C)"
-		local eth_info = luci.sys.exec("ethinfo")
+		local cpu_usage = luci.sys.exec("cat /tmp/cpu.usage") or "6%"
+		luci.sys.call("nohup sh $(awk -f /etc/cpu.awk > /tmp/cpu2.usage && mv /tmp/cpu2.usage /tmp/cpu.usage) 2>/dev/null  &")
+		local cpu_info = luci.sys.exec("cat /tmp/cpuinfo") or luci.sys.exec("/sbin/cpuinfo >/tmp/cpuinfo && cat /tmp/cpuinfo") or "ARM Processor x 0 (233MHz, 2.3°C)"
+		local eth_info = luci.sys.exec("cat /tmp/ethinfo") or luci.sys.exec("ethinfo > /tmp/ethinfo && cat /tmp/ethinfo")
+		if cache == "0" then
+			luci.sys.call("/sbin/cpuinfo >/tmp/cpuinfo && cat /tmp/cpuinfo")
+			luci.sys.call("ethinfo > /tmp/ethinfo && cat /tmp/ethinfo")
+		end
 
 		local rv = {
 			cpuinfo    = cpu_info,
@@ -194,7 +200,7 @@
 		});
 	}
 
-	XHR.poll(5, '<%=REQUEST_URI%>', { status: 1 },
+	XHR.poll(2, '<%=REQUEST_URI%>', { status: 1, cache: (npoll++ % 5) },
 		function(x, info)
 		{
 			if (!(npoll++ % 5))
