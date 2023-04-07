@@ -62,8 +62,8 @@
 		local cpu_info = luci.sys.exec("cat /tmp/cpuinfo") or luci.sys.exec("/sbin/cpuinfo >/tmp/cpuinfo && cat /tmp/cpuinfo") or "ARM Processor x 0 (233MHz, 2.3°C)"
 		local eth_info = luci.sys.exec("cat /tmp/ethinfo") or luci.sys.exec("ethinfo > /tmp/ethinfo && cat /tmp/ethinfo")
 		if cache == "0" then
-			luci.sys.call("/sbin/cpuinfo >/tmp/cpuinfo && cat /tmp/cpuinfo")
-			luci.sys.call("ethinfo > /tmp/ethinfo && cat /tmp/ethinfo")
+			luci.sys.call("/sbin/cpuinfo >/tmp/cpuinfo")
+			luci.sys.call("/sbin/ethinfo >/tmp/ethinfo")
 		end
 
 		local rv = {
@@ -191,7 +191,7 @@
 		return null;
 	}
 
-	var npoll = 1;
+	var npoll = 0;
 	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
 
 	function updateHosts() {
@@ -199,10 +199,11 @@
 			hosts = data;
 		});
 	}
-
-	XHR.poll(2, '<%=REQUEST_URI%>', { status: 1, cache: (npoll++ % 5) },
+	var poll = function(){
+		XHR.get('<%=REQUEST_URI%>', { status: 1, cache: (npoll % 5) },
 		function(x, info)
 		{
+			setTimeout(()=>{ poll() },2500)
 			if (!(npoll++ % 5))
 				updateHosts();
 
@@ -725,6 +726,8 @@
 
 		}
 	);
+}
+poll();
 //]]></script>
 
 <h2 name="content"><%:Status%></h2>
