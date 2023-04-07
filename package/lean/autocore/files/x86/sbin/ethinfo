@@ -1,13 +1,14 @@
 #!/bin/sh
 
-a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
-b=$(echo "$a" | wc -l)
 if [ -f /tmp/state/ethinfo ]; then
 if [ "$1" != "update" ]; then
 cat /tmp/state/ethinfo
 exit 0
 fi
 fi
+
+a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
+b=$(echo "$a" | wc -l)
 
 echo -n "[" > /tmp/state/ethinfo
 
