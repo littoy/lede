@@ -64,7 +64,7 @@ boot_run_hook() {
 }
 
 pivot() { # <new_root> <old_root>
-	/bin/mount -o noatime,move /proc $1/proc && \
+	/bin/mount -o relatime,move /proc $1/proc && \
 	pivot_root $1 $1$2 && {
 		/bin/mount -o noatime,move $2/dev /dev
 		/bin/mount -o noatime,move $2/tmp /tmp

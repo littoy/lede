@@ -19,7 +19,7 @@ include /lib/upgrade
 supivot() { # <new_root> <old_root>
 	/bin/mount | grep "on $1 type" 2>&- 1>&- || /bin/mount -o bind $1 $1
 	mkdir -p $1$2 $1/proc $1/sys $1/dev $1/tmp $1/overlay && \
-	/bin/mount -o noatime,move /proc $1/proc && \
+	/bin/mount -o relatime,move /proc $1/proc && \
 	pivot_root $1 $1$2 || {
 		/bin/umount -l $1 $1
 		return 1
