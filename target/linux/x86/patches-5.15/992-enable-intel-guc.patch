@@ -6,6 +6,9 @@
  	/* Don't enable GuC/HuC on pre-Gen12 */
 -	if (GRAPHICS_VER(i915) < 12) {
 +	if (GRAPHICS_VER(i915) < 9) {
- 		i915->params.enable_guc = 0;
++		i915->params.enable_guc = 0;
++		return;
++	}else if(GRAPHICS_VER(i915) < 11)
++ 		i915->params.enable_guc = 2;
  		return;
  	}
