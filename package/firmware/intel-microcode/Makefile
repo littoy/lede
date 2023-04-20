@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=intel-microcode
-PKG_VERSION:=20221108
+PKG_VERSION:=20230214
 PKG_RELEASE:=1
 
 PKG_SOURCE:=intel-microcode_3.$(PKG_VERSION).1.tar.xz
