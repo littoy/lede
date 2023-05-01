@@ -56,7 +56,7 @@
 		local user_info = luci.sys.exec("cat /proc/net/arp | grep -c '0x2'") or 0
 
 		local cpu_usage = luci.sys.exec("cat /tmp/cpu.usage") or "6%"
-		luci.sys.call("nohup sh $(awk -f /etc/cpu.awk > /tmp/cpu2.usage && mv /tmp/cpu2.usage /tmp/cpu.usage) 2>/dev/null  &")
+		luci.sys.call("nohup echo $(awk -f /etc/cpu.awk > /tmp/cpu2.usage && mv /tmp/cpu2.usage /tmp/cpu.usage 2>/dev/null) 2>/dev/null  &")
 		local cpu_info = luci.sys.exec("cat /tmp/cpuinfo") or luci.sys.exec("/sbin/cpuinfo >/tmp/cpuinfo && cat /tmp/cpuinfo") or "ARM Processor x 0 (233MHz, 2.3°C)"
 		local eth_info = luci.sys.exec("cat /tmp/ethinfo") or luci.sys.exec("ethinfo > /tmp/ethinfo && cat /tmp/ethinfo")
 		if cache == "0" then

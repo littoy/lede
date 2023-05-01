@@ -69,7 +69,7 @@
 		local leases = iter()
 		local leases6 = iter()
 
-		luci.sys.call("nohup sh $(awk -f /etc/cpu.awk > /tmp/cpu2.usage && mv /tmp/cpu2.usage /tmp/cpu.usage) 2>/dev/null &")
+		luci.sys.call("nohup echo $(awk -f /etc/cpu.awk > /tmp/cpu2.usage && mv /tmp/cpu2.usage /tmp/cpu.usage 2>/dev/null) 2>/dev/null &")
 
 		local rv = {
 			cpuusage   = cpu_usage,
