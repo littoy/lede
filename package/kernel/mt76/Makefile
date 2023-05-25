@@ -9,8 +9,7 @@ PKG_LICENSE_FILES:=
 PKG_SOURCE_URL:=https://github.com/littoy/mt76
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_DATE:=2023-05-26
-PKG_SOURCE_VERSION:=f0bacafabeae61bd22e0ac216aa839f396331757
-PKG_MIRROR_HASH:=d28869591d1cb9a967b72f5cd8215c7b2c3388b7b31147b7b18c797018ab8ffb
+PKG_SOURCE_VERSION:=bb517921433c2ba1235c98f68f94c36ff6600188
 
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_USE_NINJA:=0
@@ -31,10 +30,6 @@ STAMP_CONFIGURED_DEPENDS := $(STAGING_DIR)/usr/include/mac80211-backport/backpor
 
 include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
-include $(INCLUDE_DIR)/cmake.mk
-
-CMAKE_SOURCE_DIR:=$(PKG_BUILD_DIR)/tools
-CMAKE_BINARY_DIR:=$(PKG_BUILD_DIR)/tools
 
 define KernelPackage/mt76-default
   SUBMENU:=Wireless Drivers
@@ -300,13 +295,6 @@ define KernelPackage/mt7921e
   AUTOLOAD:=$(call AutoProbe,mt7921e)
 endef
 
-define Package/mt76-test
-  SECTION:=devel
-  CATEGORY:=Development
-  TITLE:=mt76 testmode CLI
-  DEPENDS:=kmod-mt76-core +libnl-tiny
-endef
-
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libnl-tiny
 
 NOSTDINC_FLAGS := \
@@ -409,7 +397,6 @@ define Build/Compile
 		M="$(PKG_BUILD_DIR)" \
 		NOSTDINC_FLAGS="$(NOSTDINC_FLAGS)" \
 		modules
-	$(MAKE) -C $(PKG_BUILD_DIR)/tools
 endef
 
 define Build/Install
@@ -545,11 +532,6 @@ define KernelPackage/mt7922-firmware/install
 		$(1)/lib/firmware/mediatek
 endef
 
-define Package/mt76-test/install
-	mkdir -p $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/mt76-test $(1)/usr/sbin
-endef
-
 $(eval $(call KernelPackage,mt76-core))
 $(eval $(call KernelPackage,mt76-usb))
 $(eval $(call KernelPackage,mt76x02-usb))
@@ -584,4 +566,3 @@ $(eval $(call KernelPackage,mt7921u))
 $(eval $(call KernelPackage,mt7921s))
 $(eval $(call KernelPackage,mt7921e))
 $(eval $(call KernelPackage,mt76))
-$(eval $(call BuildPackage,mt76-test))
