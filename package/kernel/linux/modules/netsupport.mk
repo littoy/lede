@@ -693,7 +693,7 @@ endef
 $(eval $(call KernelPackage,mppe))
 
 
-SCHED_MODULES_CORE = sch_ingress sch_fq_codel sch_fq sch_fq_pie sch_cake sch_hfsc sch_htb sch_tbf cls_basic cls_fw cls_route cls_flow cls_u32 em_u32 act_gact act_mirred act_skbedit cls_matchall
+SCHED_MODULES_CORE = sch_ingress sch_fq_codel sch_fq sch_hfsc sch_htb sch_tbf cls_basic cls_fw cls_route cls_flow cls_u32 em_u32 act_gact act_mirred act_skbedit cls_matchall
 SCHED_FILES_CORE = $(foreach mod,$(SCHED_MODULES_CORE),$(LINUX_DIR)/net/sched/$(mod).ko)
 
 define KernelPackage/sched-core
