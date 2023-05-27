@@ -7,7 +7,10 @@
 - 旁路由lan zone fullcone
 - r5s 网卡“最佳”参数优化
 - 支持更多电源策略
-- n6000 i226 网卡测试
+- MT7915/MT7916/MT7921无线网卡支持
+
+
+**n6000 i226 网卡测试**
 <img width="875" alt="image" src="https://user-images.githubusercontent.com/103546957/223681858-232640d1-2236-4041-8877-83a36a2bee96.png">
 
 
