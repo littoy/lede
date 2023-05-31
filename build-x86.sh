@@ -57,5 +57,5 @@ sed -i "s/-Os -pipe/-O2 -pipe/g" .config
 # patch -p1 < turboacc.patch
 # fi
 if [ $? = 0 ];then
-nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j1 >> makelog.txt 2>&1 &
+nohup make download -j8 >> makelog.txt 2>&1 && make V=s -j4 >> makelog.txt 2>&1 &
 fi

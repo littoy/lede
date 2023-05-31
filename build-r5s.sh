@@ -48,5 +48,5 @@ sed -i 's/CONFIG_CPU_TYPE="generic"/CONFIG_CPU_TYPE="cortex-a55"/g' .config
 # patch -p1 < turboacc.patch
 # fi
 if [ $? = 0 ]; then
-nohup make download -j8 >> makelog.txt 2>&1 &&  make V=s -j2 >> makelog.txt 2>&1 &
+nohup make download -j8 >> makelog.txt 2>&1 &&  make V=s -j4 >> makelog.txt 2>&1 &
 fi
