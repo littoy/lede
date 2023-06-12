@@ -6,8 +6,8 @@ START=99
 start()
 {
 	sysctl -w net.netfilter.nf_conntrack_max=6553500 >/dev/null
-	sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=7440 >/dev/null
-	sysctl -w net.netfilter.nf_conntrack_udp_timeout=60 >/dev/null
+	sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=432000 >/dev/null
+	sysctl -w net.netfilter.nf_conntrack_udp_timeout=120 >/dev/null
 	sysctl -w net.netfilter.nf_conntrack_udp_timeout_stream=180 >/dev/null
 	sysctl -w fs.nr_open=65535000 >/dev/null
 	sysctl -w net.core.netdev_budget=5000 >/dev/null
