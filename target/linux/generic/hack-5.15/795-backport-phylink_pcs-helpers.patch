@@ -1,9 +1,9 @@
 --- a/include/linux/phylink.h
 +++ b/include/linux/phylink.h
 @@ -584,10 +584,37 @@ int phylink_speed_up(struct phylink *pl)
- #define phylink_test(bm, mode)	__phylink_do_bit(test_bit, bm, mode)
  
  void phylink_set_port_modes(unsigned long *bits);
+ void phylink_set_10g_modes(unsigned long *mask);
 +
 +/**
 + * phylink_get_link_timer_ns - return the PCS link timer value
