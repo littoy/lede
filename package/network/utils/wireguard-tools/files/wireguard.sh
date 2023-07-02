@@ -111,7 +111,7 @@ proto_wireguard_setup() {
 	config_get mtu "${config}" "mtu"
 	config_get fwmark "${config}" "fwmark"
 	config_get ip6prefix "${config}" "ip6prefix"
-	config_get nohostroute "${config}" "nohostroute"
+	config_get hostroute "${config}" "hostroute"
 	config_get tunlink "${config}" "tunlink"
 
 	ip link del dev "${config}" 2>/dev/null
@@ -169,7 +169,7 @@ proto_wireguard_setup() {
 	done
 
 	# endpoint dependency
-	if [ "${nohostroute}" != "1" ]; then
+	if [ "${hostroute}" = "1" ]; then
 		wg show "${config}" endpoints | \
 		sed -E 's/\[?([0-9.:a-f]+)\]?:([0-9]+)/\1 \2/' | \
 		while IFS=$'\t ' read -r key address port; do
