@@ -168,13 +168,24 @@ define U-Boot/dilusense-dlfr100-rk3399
   USE_RKBIN:=1
 endef
 
+define U-Boot/xiaobao-nas-v1-rk3399
+  BUILD_SUBTARGET:=armv8
+  NAME:=Codinge Xiaobao NAS-I
+  BUILD_DEVICES:= \
+    codinge_xiaobao-nas-v1
+  DEPENDS:=+PACKAGE_u-boot-xiaobao-nas-v1-rk3399:arm-trusted-firmware-rk3399
+  PKG_BUILD_DEPENDS:=arm-trusted-firmware-rockchip-vendor
+  ATF:=rk3399_bl31_v1.35.elf
+  USE_RKBIN:=1
+endef
+
 # RK3566 boards
 
 define U-Boot/panther-x2-rk3566
   BUILD_SUBTARGET:=armv8
   NAME:=Panther X2
   BUILD_DEVICES:= \
-    panther-x2
+    panther_x2
   DEPENDS:=+PACKAGE_u-boot-panther-x2-rk3566:arm-trusted-firmware-rk3566
   PKG_BUILD_DEPENDS:=arm-trusted-firmware-rockchip-vendor
   ATF:=rk3568_bl31_v1.34.elf
@@ -307,6 +318,7 @@ UBOOT_TARGETS := \
   rongpin-king3399-rk3399 \
   rocktech-mpc1903-rk3399 \
   dilusense-dlfr100-rk3399 \
+  xiaobao-nas-v1-rk3399 \
   nanopi-r2c-rk3328 \
   nanopi-r2s-rk3328 \
   orangepi-r1-plus-rk3328 \
