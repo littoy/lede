@@ -58,7 +58,10 @@ firefly,rk3568-roc-pc)
 	/usr/sbin/ethtool -K eth1 tso on sg on tx on
 	;;
 friendlyarm,nanopi-r2c|\
-friendlyarm,nanopi-r2s)
+friendlyarm,nanopi-r2s|\
+seewo,sv21-rk3568|\
+xunlong,orangepi-r1-plus|\
+xunlong,orangepi-r1-plus-lts)
 	set_interface_core 2 "eth0"
 	set_interface_core 3 "eth1" "xhci-hcd:usb3"
 	;;
