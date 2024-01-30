@@ -85,7 +85,7 @@ define KernelPackage/vfio
 	enable_unsafe_noiommu_mode=n
   FILES:= \
 	$(LINUX_DIR)/drivers/vfio/vfio.ko \
-	+(LINUX_5_15||LINUX_6_1):$(LINUX_DIR)/drivers/vfio/vfio_virqfd.ko \
+	$(LINUX_DIR)/drivers/vfio/vfio_virqfd.ko@le6.1 \
 	$(LINUX_DIR)/drivers/vfio/vfio_iommu_type1.ko
   AUTOLOAD:=$(call AutoProbe,vfio vfio_iommu_type1 vfio_virqfd)
 endef
