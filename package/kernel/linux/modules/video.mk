@@ -283,7 +283,7 @@ define KernelPackage/drm
   SUBMENU:=$(VIDEO_MENU)
   TITLE:=Direct Rendering Manager (DRM) support
   HIDDEN:=1
-  DEPENDS:=+kmod-dma-buf +kmod-i2c-core +kmod-backlight \
+  DEPENDS:=+kmod-dma-buf +kmod-i2c-core +kmod-backlight +kmod-drm-amdgpu +kmod-drm-i915 \
 	+(LINUX_5_15||LINUX_6_1||LINUX_6_6):kmod-fb
   KCONFIG:=CONFIG_DRM \
 	CONFIG_DRM_EXEC@ge6.6 \
