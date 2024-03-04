@@ -1008,7 +1008,6 @@ define KernelPackage/sched
   DEPENDS:=+kmod-sched-core +kmod-lib-crc32c +kmod-lib-textsearch
   KCONFIG:= \
 	CONFIG_NET_SCH_CODEL \
-	CONFIG_NET_SCH_DSMARK@lt6.2 \
 	CONFIG_NET_SCH_GRED \
 	CONFIG_NET_SCH_MULTIQ \
 	CONFIG_NET_SCH_SFQ \
