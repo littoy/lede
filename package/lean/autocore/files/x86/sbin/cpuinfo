@@ -2,17 +2,10 @@
 
 MHz=`grep 'MHz' /proc/cpuinfo | cut -c11- |sed -n '1p'`
 
-# if [ -d /sys/devices/system/cpu/cpufreq/policy0 ]; then
-SENSOR=`sensors 2>/dev/null`
-[[ -z "$SENSOR" ]] && echo "$MHz MHz" && exit 0
 if [ "$(grep 'AMD' /proc/cpuinfo)" != "" ]; then
-TEMP=`echo "$SENSOR" | grep 'Tctl' | cut -c16-`
+TEMP=`sensors 2>/dev/null | grep 'Tctl' | cut -c16-`
 else
-TEMP=`echo "$SENSOR" | grep 'Core 0' | cut -c12-`
+TEMP=`sensors 2>/dev/null | grep '0:' | awk -F ':' '{print $2}'`
 fi
-#fi
-TEMPWIFI=`echo "$SENSOR"|grep -A2 "_phy"|grep -m1 'temp' | cut -c12-`
-NVMETEMP=`echo "$SENSOR"|grep -A2 "nvme-"|grep -m1 'Composite' | cut -c12-`
-[[ ! -z "$TEMPWIFI" ]] && TEMPWIFI="Wi-Fi:$TEMPWIFI"
-[[ ! -z "$NVMETEMP" ]] && NVMETEMP="NVME:$NVMETEMP"
-echo "$MHz MHz $TEMP $TEMPWIFI $NVMETEMP"
+
+echo "$MHz MHz $TEMP "
