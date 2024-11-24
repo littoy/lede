@@ -37,6 +37,22 @@ wifi_isup() {
 	return 0
 }
 
+wifi_isup() {
+	local dev="$1"
+
+	json_load "$(ubus_wifi_cmd "status" "$dev")"
+	json_get_keys devices
+
+	for device in $devices; do
+		json_select "$device"
+			json_get_var up up
+			[ $up -eq 0 ] && return 1
+		json_select ..
+	done
+
+	return 0
+}
+
 find_net_config() {(
 	local vif="$1"
 	local cfg
